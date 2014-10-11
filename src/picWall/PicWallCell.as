@@ -28,6 +28,7 @@ package picWall
 		{
 			//_container = new Sprite();
 			//this.addChild(_container);
+			this.buttonMode = true;
 			this._cnTxt = this.crateTxt();
 			this._enTxt = this.crateTxt();;
 		}

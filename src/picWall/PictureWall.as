@@ -1,6 +1,7 @@
 package picWall 
 {
 	import com.greensock.core.Animation;
+	import com.greensock.TimelineLite;
 	import com.greensock.TweenMax;
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
@@ -71,18 +72,32 @@ package picWall
 		private function onMouseOut(e:MouseEvent):void 
 		{
 			var cell:PicWallCell = this.getMouseCell(e.target as DisplayObject);
+			if (cell)
+			{
+				cell.filters = [];
+				cell.scaleX = cell.scaleY = 1;
+			}
 		}
 		private var pri:int=-1;
 		private function onMouseOver(e:MouseEvent):void 
 		{
 			var cell:PicWallCell = this.getMouseCell(e.target as DisplayObject);
+			trace("onMouseOver=",cell)
 			if (cell)
 			{
 				var index:int = this._cellList.indexOf(cell);
 				trace("index=",index);
 				if (index > -1 && pri!=index)
 				{
-					pri=index
+					/*if (pri > -1 && pri < this._cellList.length)
+					{
+						var preCell:PicWallCell = this._cellList[pri];
+						preCell.filters = [];
+						preCell.scaleX = cell.scaleY = 1;
+					}	*/				
+					pri = index;
+					cell.scaleX = cell.scaleY = 1.3;					
+					TweenMax.to(cell, 0, {glowFilter:{color:0xffff00, alpha:1, blurX:30, blurY:30, strength:1, quality:2} } );
 					this.reLayout(index);
 				}
 			}
@@ -125,32 +140,35 @@ package picWall
 				var cell:PicWallCell;
 				
 				var preX:Number=0;
+				var preY:Number=0;
 				var preW:Number=0;
-				var gap:Number=0;
+				var gapX:Number=15;
+				var gapY:Number=15;
 				
+				var tx:Number;
+				var ty:Number;
+				
+				var tf:TimelineLite = new TimelineLite();
+				tf.stop();
+				var duration:Number = 0.25;
+				var delay:Number = 0.15;
 				for (var i:int = 0; i < this._length; i++) 
 				{
-					cell = new PicWallCell();
+					cell = new PicWallCell();					
 					this._container.addChild(cell);
 					cell.info = this._dataProvide[i];
-					if (i < midi)
-					{
-						//左边
-						cell.picture.height =this.HEIGHT- ( midi - i) * this._stepH;
-						cell.picture.width =this.WIDTH- ( midi - i) * this._stepW;
-					}else if (i > midi)
-					{
-						//右边
-						cell.picture.height = this.HEIGHT - ( i - midi) * this._stepH;
-						cell.picture.width =this.WIDTH- ( i - midi ) * this._stepW;
-					}
-					cell.picture.y = this.HEIGHT - cell.picture.height;
-					cell.x = preX + preW + gap;
-					cell.txtLayout();
-					preX = cell.x;
+					cell.alpha = 0;
+					tx = preX + preW + gapX;
+					ty = preY + gapY;
+					preX = tx;
 					preW = cell.width;
+					preY = ty;
+					//cell.rotation = 10;
+					TweenMax.to(cell, duration, { delay:delay, x:tx, y:ty, alpha:1 } );
+					//tf.append();
 					_cellList.push(cell);
 				}
+				tf.play();
 			}
 		}
 		private function reLayout(midi:int):void 
@@ -166,40 +184,24 @@ package picWall
 				var ty:Number;
 				
 				var preX:Number=0;
+				var preY:Number=0;
 				var preW:Number=0;
-				var gap:Number=0;
+				var gapX:Number=15;
+				var gapY:Number = 15;
+				
+				var duration:Number = 0.25;
+				var delay:Number = 0.15;
 				
 				for (var i:int = 0; i < this._length; i++) 
 				{
-					cell = this._cellList[i];					
-					if (i < midi)
-					{
-						//左边
-						th =this.HEIGHT - ( midi - i) * this._stepH;
-						tw =this.WIDTH - ( midi - i) * this._stepW;
-					}else if (i > midi)
-					{
-						//右边
-						th = this.HEIGHT - ( i - midi) * this._stepH;
-						tw =this.WIDTH- ( i - midi ) * this._stepW;
-					}					
-					ty = this.HEIGHT - th;
-					tx = preX + preW + gap;
-					if (i == midi)
-					{						
-						th = this.HEIGHT;
-						tw = this.WIDTH;
-						ty = 0;
-					}
-					preX = cell.x;
-					preW = tw;
-					TweenMax.killTweensOf(cell);
-					TweenMax.killTweensOf(cell.picture);
-					TweenMax.to(cell.picture, 0.15, { width:tw, height:th,y:ty } );
-					TweenMax.to(cell, 0.2, { x:tx, delay:0.2 } );
-					trace("i=",i,"tx=",tx,"ty=",ty,"midi=",midi);
-					cell.txtLayout();					
-					
+					cell = this._cellList[i];				
+					tx = preX + preW + gapX;
+					ty = preY + gapY;
+					preX = tx;					
+					preY = ty;
+					preW = cell.width;
+					//cell.rotation = 10;
+					TweenMax.to(cell, duration, { delay:delay, x:tx, y:ty} );
 				}
 			}
 		}
