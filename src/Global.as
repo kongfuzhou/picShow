@@ -18,10 +18,10 @@ package
 		{
 			
 		}
-		public static function centerUI(ui:DisplayObject,containerW:Number,containerH:Number,uiPoint:Point=null):void 
+		public static function centerUI(ui:DisplayObject,containerW:Number,containerH:Number,uiPoint:Point=null,uiW:Number=-1,uiH:Number=-1):void 
 		{
-			ui.x = (containerW - ui.width) / 2;
-			ui.y = (containerH - ui.height) / 2;
+			ui.x = (containerW - (uiW==-1?ui.width:uiW)) / 2;
+			ui.y = (containerH - (uiW==-1?ui.height:uiW)) / 2;
 			if (uiPoint)
 			{
 				ui.x += uiPoint.x;

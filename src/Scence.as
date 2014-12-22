@@ -31,7 +31,6 @@ package
 			curSize = {w:curPic.width,h:curPic.height };			
 			curEffectType= Math.random() * (Global.MAX_EFFECT - 1) + 1;
 			//curEffectType = 1;
-			trace("curEffectType=",curEffectType)
 			Global.centerUI(this, Config.STAGE_W, Config.STAGE_H);
 			if (curEffectType==2 || curEffectType==3) 
 			{
@@ -50,7 +49,6 @@ package
 		}
 		private function onComplete():void 
 		{
-			
 			
 		}
 		
