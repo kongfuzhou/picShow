@@ -11,12 +11,27 @@ package config
 	 */
 	public class Config 
 	{
+		public static const STAGE_W:Number = 1024;
+		public static const STAGE_H:Number = 768;
+		
 		
 		public function Config() 
 		{
 			
 		}
-		
+		public static function getScenceData():Array
+		{
+			var data:Array = [];
+			var labels:Array = ["无", "雪", "玫瑰", "蓝妖姬"];
+			var obj:Object;
+			for (var i:int = 0; i < labels.length; i++) 
+			{
+				obj = { id:i + 1, label:labels[i] };
+				data.push(obj);
+			}
+			
+			return data;
+		}
 		public static function getPicWallData():Vector.<PicWallCellInfo>
 		{
 			var vec:Vector.<PicWallCellInfo> = new Vector.<PicWallCellInfo>();
