@@ -2,8 +2,10 @@ package
 {
 	import config.Config;
 	import dragDownList.DragDownList;
+	import dragDownList.Event.DragDownListEvent;
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
+	import flash.events.Event;
 	import flash.geom.Point;
 	
 	/**
@@ -12,12 +14,14 @@ package
 	 */
 	public class Scence extends Sprite 
 	{
-		private const WIDTH:Number = 700;
+		private const WIDTH:Number = 850;
 		private const HEIGHT:Number = 500;
 		private var curPic:DisplayObject;
 		private var curEffectType:int;
 		private var curSize:Object;
-		private var list:DragDownList;
+		private var scenceList:DragDownList;
+		private var _allPictrues:Array = [];
+		
 		public function Scence() 
 		{
 			super();
@@ -28,24 +32,33 @@ package
 			this.graphics.lineStyle(1, 0xff0000,0.5);
 			this.graphics.drawRect(0, 0, WIDTH, HEIGHT);
 			
-			list = new DragDownList(this);
-			list.show(true);
-			list.label = "场景选择";		
-			list.x = 30;
-			list.y = 50;
-			list.listTextColor = "#ff0000";
-			//list.listBgColor = 0xffff00;
-			list.setStyle("labelColor", "#ff0000");
-			list.setStyle("btnColor", 0xffff00);
-			list.setStyle("btnWidth", 200);
-			list.setStyle("btnHeight", 50);
-			list.dataProvide = Config.getScenceData();
-			trace(list.parent);
+			scenceList = new DragDownList(this);
+			scenceList.show(true);
+			scenceList.label = "场景选择";		
+			scenceList.x = this.WIDTH+10;
+			scenceList.y = 0;
+			scenceList.listTextColor = "#ffff00";
+			//scenceList.listBgColor = 0xffff00;
+			scenceList.setStyle("labelColor", "#ffff00");
+			
+			scenceList.setStyle("buttonSkin",ListBtn2);
+			scenceList.listBtnSkin = ListBtn2;
+			scenceList.setStyle("btnColor", 0xffff00);
+			
+			/*scenceList.setStyle("btnWidth", 60);
+			scenceList.setStyle("btnHeight", 30);*/
+			
+			scenceList.dataProvide = Config.getScenceData();
+			scenceList.addEventListener(DragDownListEvent.LIST_CHANGE, onListChange);
+		}
+		
+		private function onListChange(e:DragDownListEvent):void 
+		{
+			trace(e.data.id);
 		}
 		
 		public function showPictue(pic:DisplayObject):void 
 		{
-			//Global.clearChild(this);
 			if (curPic && curPic.parent) 
 			{
 				curPic.parent.removeChild(curPic);

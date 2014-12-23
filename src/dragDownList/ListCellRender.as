@@ -4,6 +4,7 @@ package dragDownList
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.filters.ColorMatrixFilter;
+	import flash.filters.GlowFilter;
 	
 	/**
 	 * ...
@@ -69,7 +70,8 @@ package dragDownList
 									0.5086,0.2094,0.082,0,0,
 									0,0,0,1,0
 								]);
-				this.filters = [colorFilter];
+				var glow:GlowFilter = new GlowFilter(0xffffff,1,3,3,3,3);//发光 0xB5e71f
+				this.filters = [glow];
 			}else
 			{
 				this.filters = [];

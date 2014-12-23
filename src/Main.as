@@ -27,11 +27,21 @@ package
 			// entry point
 			this.stage.addEventListener(MouseEvent.CLICK, onClick);
 			
+			
 		}
 		private var scence:Scence;
 		private var type:int = 1;
+		private var fire:Fireworks;
 		private function onClick(e:MouseEvent):void 
 		{
+			if (!fire) 
+			{
+				fire = new Fireworks();
+				addChild(fire);
+			}
+			fire.start("网页游戏");
+			return;
+			
 			var pic:Bitmap = new Bitmap();
 			if (type==1) 
 			{
